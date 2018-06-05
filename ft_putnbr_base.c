@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 15:29:08 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/05 15:38:54 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/05 18:00:16 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ size_t	ft_putnbr_base(const char *value, unsigned char base)
 	temp = (char *)value;
 	while ((ft_isdigit(*temp) ? *temp - '0' : *temp - 'A' + 10) < base
 		&& ft_isalnum(*temp))
-			temp++;
+		temp++;
 	return (temp - value);
 }

@@ -6,12 +6,11 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/05 16:42:34 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/05 18:49:41 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include "libft/libft.h"
+#include "ft_printf.h"
 
 static unsigned char	ft_assign_flags(char **format)
 {
@@ -22,15 +21,15 @@ static unsigned char	ft_assign_flags(char **format)
 		|| **format == '+' || **format == ' ')
 	{
 		if (**format == '#')
-			flags |= 1;
+			flags |= FORCE_STYLE;
 		else if (**format == '0')
-			flags |= 2;
+			flags |= PAD_ZERO;
 		else if (**format == '-')
-			flags |= 4;
+			flags |= LEFT_JUSTIFY;
 		else if (**format == '+')
-			flags |= 8;
+			flags |= SIGN_PLUS;
 		else if (**format == ' ')
-			flags |= 16;
+			flags |= SIGN_SPACE;
 		(*format)++;
 	}
 	return (flags);
@@ -43,54 +42,49 @@ static unsigned char	ft_assign_length(char **format)
 		if (*(++(*format)) == 'h')
 		{
 			(*format)++;
-			return (1);
+			return (CHAR);
 		}
-		return (2);
+		return (SHORT_INT);
 	}
 	if (**format == 'l')
 	{
 		if (*(++(*format)) == 'l')
 		{
 			(*format)++;
-			return (3);
+			return (LONG_LONG_INT);
 		}
-		return (4);
+		return (LONG_INT);
 	}
 	if (*((*format)++) == 'j')
-		return (5);
+		return (INTMAX_T);
 	if (*(*format - 1) == 'z')
-		return (6);
+		return (SIZE_T);
 	(*format)--;
-	return (0);
+	return (INT);
 }
 
-static char			*ft_format_arg(char *format, va_list args)
+static char				*ft_format_arg(char *format, va_list args)
 {
-	unsigned char	flags;
-	size_t			width;
-	size_t			precision;
+	t_printf_args pf_args;
 
-	flags = 0;
-	width = 0;
-	precision = 0;
 	if (*format == '%')
 		ft_putchar('%');
-	flags = ft_assign_flags(&format);
-	width = ft_atou_base(*format, 8);
+	pf_args.flags = ft_assign_flags(&format);
+	pf_args.width = ft_atou_base(*format, 8);
 	while (ft_isdigit(*format))
 		format++;
 	if (*format == '.')
-		precision = ft_atou_base(*(++(format)), 8);
-	else
-		precision = 6;
+		pf_args.precision = ft_atou_base(*(++(format)), 8);
 	while (ft_isdigit(*format))
 		format++;
-	flags += ft_assign_length(&format) >> 5;
-	ft_put_arg(*format, args, flags, width, precision);
+	pf_args.flags += ft_assign_length(&format) >> 5;
+	pf_args.format = *format;
+	pf_args.args = &args;
+	ft_put_arg(pf_args);
 	return (++format);
 }
 
-static size_t				ft_put_escape(char *c)
+static size_t			ft_put_escape(char *c)
 {
 	if (*c == 'a')
 		ft_putchar('\a');
