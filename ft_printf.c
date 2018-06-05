@@ -6,19 +6,20 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/05 15:06:32 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/05 16:42:34 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include "libft/libft.h"
 
-unsigned char	ft_assign_flags(char **format)
+static unsigned char	ft_assign_flags(char **format)
 {
 	unsigned char	flags;
 
 	flags = 0;
-	while (ft_is_printf_flag(**format))
+	while (**format == '#' || **format == '0' || **format == '-'
+		|| **format == '+' || **format == ' ')
 	{
 		if (**format == '#')
 			flags |= 1;
@@ -35,7 +36,7 @@ unsigned char	ft_assign_flags(char **format)
 	return (flags);
 }
 
-unsigned char	ft_assign_length(char **format)
+static unsigned char	ft_assign_length(char **format)
 {
 	if (**format == 'h')
 	{
@@ -63,7 +64,7 @@ unsigned char	ft_assign_length(char **format)
 	return (0);
 }
 
-char			*ft_format_arg(char *format, va_list args)
+static char			*ft_format_arg(char *format, va_list args)
 {
 	unsigned char	flags;
 	size_t			width;
@@ -75,11 +76,11 @@ char			*ft_format_arg(char *format, va_list args)
 	if (*format == '%')
 		ft_putchar('%');
 	flags = ft_assign_flags(&format);
-	width = ft_atoi_base(*format, 8);
+	width = ft_atou_base(*format, 8);
 	while (ft_isdigit(*format))
 		format++;
 	if (*format == '.')
-		precision = ft_atoi_base(*(++(format)), 8);
+		precision = ft_atou_base(*(++(format)), 8);
 	else
 		precision = 6;
 	while (ft_isdigit(*format))
@@ -89,7 +90,7 @@ char			*ft_format_arg(char *format, va_list args)
 	return (++format);
 }
 
-int				ft_put_escape(char *c)
+static size_t				ft_put_escape(char *c)
 {
 	if (*c == 'a')
 		ft_putchar('\a');
@@ -116,7 +117,7 @@ int				ft_put_escape(char *c)
 	return (1);
 }
 
-int				ft_printf(const char format, ...)
+int						ft_printf(const char format, ...)
 {
 	va_list	args;
 	size_t	esc_len;
