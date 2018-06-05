@@ -6,14 +6,90 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/04 17:51:26 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/05 15:06:32 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include "libft/libft.h"
 
-int		ft_put_escape(char *c)
+unsigned char	ft_assign_flags(char **format)
+{
+	unsigned char	flags;
+
+	flags = 0;
+	while (ft_is_printf_flag(**format))
+	{
+		if (**format == '#')
+			flags |= 1;
+		else if (**format == '0')
+			flags |= 2;
+		else if (**format == '-')
+			flags |= 4;
+		else if (**format == '+')
+			flags |= 8;
+		else if (**format == ' ')
+			flags |= 16;
+		(*format)++;
+	}
+	return (flags);
+}
+
+unsigned char	ft_assign_length(char **format)
+{
+	if (**format == 'h')
+	{
+		if (*(++(*format)) == 'h')
+		{
+			(*format)++;
+			return (1);
+		}
+		return (2);
+	}
+	if (**format == 'l')
+	{
+		if (*(++(*format)) == 'l')
+		{
+			(*format)++;
+			return (3);
+		}
+		return (4);
+	}
+	if (*((*format)++) == 'j')
+		return (5);
+	if (*(*format - 1) == 'z')
+		return (6);
+	(*format)--;
+	return (0);
+}
+
+char			*ft_format_arg(char *format, va_list args)
+{
+	unsigned char	flags;
+	size_t			width;
+	size_t			precision;
+
+	flags = 0;
+	width = 0;
+	precision = 0;
+	if (*format == '%')
+		ft_putchar('%');
+	flags = ft_assign_flags(&format);
+	width = ft_atoi_base(*format, 8);
+	while (ft_isdigit(*format))
+		format++;
+	if (*format == '.')
+		precision = ft_atoi_base(*(++(format)), 8);
+	else
+		precision = 6;
+	while (ft_isdigit(*format))
+		format++;
+	flags += ft_assign_length(&format) >> 5;
+	ft_put_arg(*format, args, flags, width, precision);
+	return (++format);
+}
+
+int				ft_put_escape(char *c)
 {
 	if (*c == 'a')
 		ft_putchar('\a');
@@ -40,7 +116,7 @@ int		ft_put_escape(char *c)
 	return (1);
 }
 
-int		ft_printf(const char *format, ...)
+int				ft_printf(const char format, ...)
 {
 	va_list	args;
 	size_t	esc_len;
@@ -52,12 +128,16 @@ int		ft_printf(const char *format, ...)
 		if (*current == '\\')
 		{
 			if (!(esc_len = ft_put_escape(++current)))
-				return (0);
+			{
+				va_end(args);
+				return (current - format);
+			}
 			current += esc_len;
 		}
 		else if (*current == '%')
-			current += ft_put_arg((++current), args);
+			current = ft_format_arg(++current, args);
 		else
 			ft_putchar(*current++);
+	va_end(args);
 	return (current - format);
 }
