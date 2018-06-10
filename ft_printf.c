@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/05 18:49:41 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/10 14:49:35 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ static char				*ft_format_arg(char *format, va_list args)
 	if (*format == '%')
 		ft_putchar('%');
 	pf_args.flags = ft_assign_flags(&format);
-	pf_args.width = ft_atou_base(*format, 8);
+	pf_args.width = ft_atoi_base(*format, 8);
 	while (ft_isdigit(*format))
 		format++;
 	if (*format == '.')
-		pf_args.precision = ft_atou_base(*(++(format)), 8);
+		pf_args.precision = ft_atoi_base(*(++(format)), 8);
 	while (ft_isdigit(*format))
 		format++;
 	pf_args.flags += ft_assign_length(&format) >> 5;
