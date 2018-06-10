@@ -6,14 +6,14 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:35:46 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/05 18:49:04 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/10 12:12:29 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <libft.h>
+# include "libft/libft.h"
 # include <stdarg.h>
 
 # define MIN(X,Y) X > Y ? Y : X
