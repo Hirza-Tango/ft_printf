@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
+/*   ft_putlitnum.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 15:29:08 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/05 18:00:16 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/10 17:37:32 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 
-size_t	ft_putnbr_base(const char *value, unsigned char base)
+size_t	ft_putlitnum(const char *value, unsigned char base)
 {
 	char *temp;
 

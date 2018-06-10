@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:35:46 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/10 14:50:13 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/10 17:38:06 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct	s_printf_args
 }				t_printf_args;
 
 int				ft_printf(const char format, ...);
-size_t			ft_putnbr_base(const char *value, unsigned char base);
+size_t			ft_putlitnum(const char *value, unsigned char base);
+char			*ft_getstr_all(t_printf_args args);
 
 #endif

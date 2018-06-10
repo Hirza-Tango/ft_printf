@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/10 14:49:35 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/10 17:37:11 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static size_t			ft_put_escape(char *c)
 	else if (*c == '\\')
 		ft_putchar('\\');
 	else if (ft_isdigit(*c))
-		return (ft_putnbr_base(c, 8));
+		return (ft_putlitnum(c, 8));
 	return (1);
 }
 
