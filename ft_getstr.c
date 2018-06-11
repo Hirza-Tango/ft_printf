@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:21 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/10 17:34:07 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/11 13:29:41 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,34 +87,29 @@ static char	*ft_getstr_u(t_printf_args args, unsigned char base)
 
 static char	*ft_getstr_char(t_printf_args args)
 {
-	const int		i = va_arg(*args.args, int);
-	char			*str;
+	const int	i = va_arg(*args.args, int);
+	const char	*ret = ft_strnew(5);
+	char		*str;
 
-	str = ft_strnew(5);
+	str = ret;
 	if (i < 0)
 		return (str);
 	else if (i <= 0x7F || args.format == 'c')
 		*str = (unsigned char)i;
-	//TODO: some fancy bitshift shi(f)t
 	else if (i <= 0x7FF)
 	{
-		*str++ = 0;
-		*str++ = 0;
+		*str++ = 0xC0 | (i >> 6 & 0x1F);
+		*str++ = 0x80 | (i & 0x3F);
 	}
 	else if (i <= 0xFFFF)
 	{
-		*str++ = 0;
-		*str++ = 0;
-		*str++ = 0;
+		*str++ = 0xE0 | (i >> 12 & 0xF);
+		*str++ = 0x80 | (i >> 6 & 0x3F);
+		*str++ = 0x80 | (i & 0x3F);
 	}
 	else if (i <= 0x10FFFF)
-	{
-		*str++ = 0;
-		*str++ = 0;
-		*str++ = 0;
-		*str++ = 0;
-	}
-	return (str);
+		ft_setwchar4(i, ret);
+	return (ret);
 }
 
 char		*ft_getstr_all(t_printf_args args)
