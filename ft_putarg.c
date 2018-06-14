@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/11 15:50:22 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/14 16:16:21 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,27 @@ static void	ft_putarg_u(t_printf_args a, const char *str)
 			ft_putchar(' ');
 }
 
+static void	ft_putarg_i(t_printf_args a, const char *str)
+{
+	const size_t	len = ft_strlen(str);
+	
+	if (*str != '-' && (a.flags & SIGN_PLUS || a.flags & SIGN_SPACE))
+		a.width--;
+	if (!(a.flags & LEFT_JUSTIFY) & !(a.flags & PAD_ZERO))
+		while (a.width-- > max(len, a.precision))
+			ft_putchar(' ');
+	while (!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
+		ft_putchar('0');
+	if (*str != '-' && (a.flags & SIGN_PLUS))
+		ft_putchar('+');
+	else if (*str != '-' && (a.flags & SIGN_SPACE))
+		ft_putchar(' ');
+	ft_putstr(str);
+	if (a.flags & LEFT_JUSTIFY)
+		while (a.width-- > max(len, a.precision))
+			ft_putchar(' ');
+}
+
 void			ft_putarg(t_printf_args a)
 {
 	const char		*str = ft_getstr_all(a);
@@ -67,6 +88,7 @@ void			ft_putarg(t_printf_args a)
 	else if (ft_tolower(a.format) == 'u' || ft_tolower(a.format) == 'o' ||
 		ft_tolower(a.format) == 'x' || a.format == 'p')
 		ft_putarg_u(a, str);
-	//TODO: manage symbols
+	else
+		ft_putarg_i(a, str);
 	free(str);
 }
