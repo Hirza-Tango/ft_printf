@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:21 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/11 15:43:59 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/14 16:37:14 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ static char	*ft_getstr_dec(t_printf_args args)
 	if (len == INT)
 		return (ft_itoa(va_arg(*args.args, int)));
 	if (len == CHAR)
-		return (ft_itoa(va_arg(*args.args, char)));
+		return (ft_itoa((char)va_arg(*args.args, int)));
 	if (len == SHORT_INT)
-		return (ft_itoa(va_arg(*args.args, short int)));
+		return (ft_itoa((short int)va_arg(*args.args, int)));
 	if (len == LONG_LONG_INT)
 		return (ft_itoa(va_arg(*args.args, long long int)));
 	if (len == INTMAX_T)
@@ -45,7 +45,7 @@ static char	*ft_getstr_dec(t_printf_args args)
 		exit(1);
 }
 
-static char	*ft_getstr_u(t_printf_args args, unsigned char base)
+static char	*ft_getstr_u(t_printf_args args, unsigned char rad)
 {
 	const unsigned char len = args.flags << 5;
 
@@ -54,19 +54,19 @@ static char	*ft_getstr_u(t_printf_args args, unsigned char base)
 	if (ft_tolower(args.format) == 'u')
 		args.flags |= ~FORCE_STYLE;
 	if (len == LONG_INT || args.format == 'O' || args.format == 'U')
-		return (ft_itoa_base(va_arg(*args.args, unsigned long int), base));
+		return (ft_itoa_base(va_arg(*args.args, unsigned long int), rad));
 	if (len == INT)
-		return (ft_itoa_base(va_arg(*args.args, unsigned int), base));
+		return (ft_itoa_base(va_arg(*args.args, unsigned int), rad));
 	if (len == CHAR)
-		return (ft_itoa_base(va_arg(*args.args, unsigned char), base));
+		return (ft_itoa_base((unsigned char)va_arg(*args.args, int), rad));
 	if (len == SHORT_INT)
-		return (ft_itoa_base(va_arg(*args.args, unsigned short int), base));
+		return (ft_itoa_base((unsigned short int)va_arg(*args.args, int), rad));
 	if (len == LONG_LONG_INT)
-		return (ft_itoa_base(va_arg(*args.args, unsigned long long int), base));
+		return (ft_itoa_base(va_arg(*args.args, unsigned long long int), rad));
 	if (len == INTMAX_T)
-		return (ft_itoa_base(va_arg(*args.args, uintmax_t), base));
+		return (ft_itoa_base(va_arg(*args.args, uintmax_t), rad));
 	if (len == SIZE_T)
-		return (ft_itoa_base(va_arg(*args.args, size_t), base));
+		return (ft_itoa_base(va_arg(*args.args, size_t), rad));
 	else
 		exit(1);
 }
@@ -77,7 +77,7 @@ static char	*ft_getstr_char(t_printf_args args)
 	const char	*ret = ft_strnew(5);
 	char		*str;
 
-	str = ret;
+	str = (char *)ret;
 	if (i < 0)
 		return (str);
 	else if (i <= 0x7F || (args.format == 'c' && args.flags << 5 != LONG_INT))
@@ -95,7 +95,7 @@ static char	*ft_getstr_char(t_printf_args args)
 	}
 	else if (i <= 0x10FFFF)
 		ft_setwchar4(i, ret);
-	return (ret);
+	return ((char *)ret);
 }
 
 char		*ft_getstr_all(t_printf_args args)
@@ -118,4 +118,5 @@ char		*ft_getstr_all(t_printf_args args)
 		return (ft_getstr_u(args, -16));
 	if (f == 'o' || f == 'O')
 		return (ft_getstr_u(args, 8));
+	return (NULL);
 }

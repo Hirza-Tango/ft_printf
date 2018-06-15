@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/14 16:16:21 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/14 16:56:27 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ static void	ft_putarg_str(t_printf_args a, const char *str)
 	if (!a.precision || ft_tolower(a.format) == 'c')
 		a.precision = len;
 	if (!(a.flags & LEFT_JUSTIFY))
-		while (a.width-- > min(len, a.precision))
+		while (a.width-- > MIN(len, a.precision))
 			ft_putchar(' ');
 	ft_putstr(str);
 	if (a.flags & LEFT_JUSTIFY)
-		while (a.width-- > min(len, a.precision))
+		while (a.width-- > MIN(len, a.precision))
 			ft_putchar(' ');
 }
 
@@ -38,7 +38,7 @@ static void	ft_putarg_u(t_printf_args a, const char *str)
 			a.width--;
 	}
 	if (!(a.flags & LEFT_JUSTIFY) & !(a.flags & PAD_ZERO))
-		while (a.width-- > max(len, a.precision))
+		while (a.width-- > MAX(len, a.precision))
 			ft_putchar(' ');
 	if (a.flags & FORCE_STYLE && ft_tolower(a.format) != 'u')
 	{
@@ -52,7 +52,7 @@ static void	ft_putarg_u(t_printf_args a, const char *str)
 		ft_putchar('0');
 	ft_putstr(str);
 	if (a.flags & LEFT_JUSTIFY)
-		while (a.width-- > max(len, a.precision))
+		while (a.width-- > MAX(len, a.precision))
 			ft_putchar(' ');
 }
 
@@ -63,7 +63,7 @@ static void	ft_putarg_i(t_printf_args a, const char *str)
 	if (*str != '-' && (a.flags & SIGN_PLUS || a.flags & SIGN_SPACE))
 		a.width--;
 	if (!(a.flags & LEFT_JUSTIFY) & !(a.flags & PAD_ZERO))
-		while (a.width-- > max(len, a.precision))
+		while (a.width-- > MAX(len, a.precision))
 			ft_putchar(' ');
 	while (!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
 		ft_putchar('0');
@@ -73,15 +73,15 @@ static void	ft_putarg_i(t_printf_args a, const char *str)
 		ft_putchar(' ');
 	ft_putstr(str);
 	if (a.flags & LEFT_JUSTIFY)
-		while (a.width-- > max(len, a.precision))
+		while (a.width-- > MAX(len, a.precision))
 			ft_putchar(' ');
 }
 
 void			ft_putarg(t_printf_args a)
 {
-	const char		*str = ft_getstr_all(a);
-	const size_t	len = ft_strlen(str);
-
+	char		*str;
+	
+	str = ft_getstr_all(a);
 	a.width--;
 	if (ft_tolower(a.format) == 's' || ft_tolower(a.format) == 'c')
 		ft_putarg_str(a, str);

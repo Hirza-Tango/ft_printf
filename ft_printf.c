@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/10 17:37:11 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/14 17:45:21 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,25 +63,29 @@ static unsigned char	ft_assign_length(char **format)
 	return (INT);
 }
 
-static char				*ft_format_arg(char *format, va_list args)
+static int				ft_format_arg(char *format, va_list args)
 {
-	t_printf_args pf_args;
+	t_printf_args	pf_args;
+	const char		*start = format;
 
 	if (*format == '%')
+	{
 		ft_putchar('%');
+		return (1);
+	}
 	pf_args.flags = ft_assign_flags(&format);
-	pf_args.width = ft_atoi_base(*format, 8);
+	pf_args.width = ft_atou_base(format, 8);
 	while (ft_isdigit(*format))
 		format++;
 	if (*format == '.')
-		pf_args.precision = ft_atoi_base(*(++(format)), 8);
+		pf_args.precision = ft_atou_base((++(format)), 8);
 	while (ft_isdigit(*format))
 		format++;
 	pf_args.flags += ft_assign_length(&format) >> 5;
 	pf_args.format = *format;
-	pf_args.args = &args;
-	ft_put_arg(pf_args);
-	return (++format);
+	pf_args.args = (va_list *)args;
+	ft_putarg(pf_args);
+	return (++format - start);
 }
 
 static size_t			ft_put_escape(char *c)
@@ -111,14 +115,14 @@ static size_t			ft_put_escape(char *c)
 	return (1);
 }
 
-int						ft_printf(const char format, ...)
+int						ft_printf(const char *format, ...)
 {
 	va_list	args;
 	size_t	esc_len;
 	char	*current;
 
 	current = (char *)format;
-	va_start(args, current);
+	va_start(args, format);
 	while (*current)
 		if (*current == '\\')
 		{
@@ -130,7 +134,7 @@ int						ft_printf(const char format, ...)
 			current += esc_len;
 		}
 		else if (*current == '%')
-			current = ft_format_arg(++current, args);
+			current += ft_format_arg(current, args) + 1;
 		else
 			ft_putchar(*current++);
 	va_end(args);
