@@ -9,6 +9,9 @@ $(NAME): $(OBJ) libft/libft.a
 	cp libft/libft.a $(NAME)
 	@ar rcs $(NAME) $(OBJ) libft/libft.a
 
+debug: CFLAGS += -g -DDEBUG
+debug: re
+
 libft/libft.a:
 	make -C libft/
 
