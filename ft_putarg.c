@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/14 16:56:27 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/17 17:34:59 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ static void	ft_putarg_str(t_printf_args a, const char *str)
 		while (a.width-- > MIN(len, a.precision))
 			ft_putchar(' ');
 }
-
+#include <stdio.h>
 static void	ft_putarg_u(t_printf_args a, const char *str)
 {
 	const size_t	len = ft_strlen(str);
 	
 	if (a.flags & FORCE_STYLE && ft_tolower(a.format) != 'u')
 	{
-		a.width--;
+		a.width > 0 ? a.width-- : a.width;
 		if (a.format == 'p' || ft_tolower(a.format == 'x'))
-			a.width--;
+			a.width > 0 ? a.width-- : a.width;
 	}
 	if (!(a.flags & LEFT_JUSTIFY) & !(a.flags & PAD_ZERO))
 		while (a.width-- > MAX(len, a.precision))
@@ -61,7 +61,7 @@ static void	ft_putarg_i(t_printf_args a, const char *str)
 	const size_t	len = ft_strlen(str);
 	
 	if (*str != '-' && (a.flags & SIGN_PLUS || a.flags & SIGN_SPACE))
-		a.width--;
+		a.width > 0 ? a.width-- : a.width;
 	if (!(a.flags & LEFT_JUSTIFY) & !(a.flags & PAD_ZERO))
 		while (a.width-- > MAX(len, a.precision))
 			ft_putchar(' ');
@@ -82,7 +82,11 @@ void			ft_putarg(t_printf_args a)
 	char		*str;
 	
 	str = ft_getstr_all(a);
-	a.width--;
+	//a.width--;
+	if (a.format == 'p')
+		a.flags |= FORCE_STYLE;
+	if (ft_tolower(a.format) == 'u')
+		a.flags |= ~FORCE_STYLE;
 	if (ft_tolower(a.format) == 's' || ft_tolower(a.format) == 'c')
 		ft_putarg_str(a, str);
 	else if (ft_tolower(a.format) == 'u' || ft_tolower(a.format) == 'o' ||

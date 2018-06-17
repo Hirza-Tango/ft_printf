@@ -1,6 +1,6 @@
 NAME=libftprintf.a
 CC=gcc
-CFLAGS=-c -Wall -Wextra -Werror -I. -Ofast
+CFLAGS=-c -Wall -Wextra -Werror -I. -Ofast -g
 CFILES=ft_getstr.c ft_helpers.c ft_printf.c ft_putarg.c
 
 OBJ=$(CFILES:%.c=build/%.o)
@@ -8,9 +8,6 @@ OBJ=$(CFILES:%.c=build/%.o)
 $(NAME): $(OBJ) libft/libft.a
 	cp libft/libft.a $(NAME)
 	@ar rcs $(NAME) $(OBJ) libft/libft.a
-
-debug: CFLAGS += -g -DDEBUG
-debug: re
 
 libft/libft.a:
 	make -C libft/

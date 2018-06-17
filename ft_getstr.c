@@ -6,21 +6,39 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:21 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/14 16:37:14 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/17 17:34:04 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
+#include <stdio.h>
 static char	*ft_getstr_str(t_printf_args args)
 {
-	const char		*str = va_arg(*args.args, char *);
-
-	args.flags &= ~SIGN_PLUS;
-	args.flags &= ~SIGN_SPACE;
-	args.flags &= ~FORCE_STYLE;
-	args.flags &= ~PAD_ZERO;
-	return (ft_strdup(str));
+	char		*str;
+	int			*arr;
+	int			*temp;
+	size_t		len;
+	
+	if (args.format == 's' && args.flags >> 5 != LONG_INT)
+	{
+		if (!(str = va_arg(*args.args, char *)))
+			return (ft_strdup("(null)"));
+		return (ft_strdup(str));
+	}
+	if (!(arr = va_arg(*args.args, wchar_t *)))
+		return (ft_strdup("(null)"));
+	temp = arr;
+	len = 0;
+	while (*temp++)
+		len++;
+	str = ft_strnew(len * 4 + 1);
+	while (*arr)
+	{
+		str = ft_appendwchar(*arr, str);
+		arr++;
+	}
+	return ((char *)str);
 }
 
 static char	*ft_getstr_dec(t_printf_args args)
@@ -45,14 +63,10 @@ static char	*ft_getstr_dec(t_printf_args args)
 		exit(1);
 }
 
-static char	*ft_getstr_u(t_printf_args args, unsigned char rad)
+static char	*ft_getstr_u(t_printf_args args, char rad)
 {
 	const unsigned char len = args.flags << 5;
 
-	if (args.format == 'p')
-		args.flags &= FORCE_STYLE;
-	if (ft_tolower(args.format) == 'u')
-		args.flags |= ~FORCE_STYLE;
 	if (len == LONG_INT || args.format == 'O' || args.format == 'U')
 		return (ft_itoa_base(va_arg(*args.args, unsigned long int), rad));
 	if (len == INT)
@@ -73,29 +87,11 @@ static char	*ft_getstr_u(t_printf_args args, unsigned char rad)
 
 static char	*ft_getstr_char(t_printf_args args)
 {
-	const int	i = va_arg(*args.args, int);
-	const char	*ret = ft_strnew(5);
-	char		*str;
+	char	*str;
 
-	str = (char *)ret;
-	if (i < 0)
-		return (str);
-	else if (i <= 0x7F || (args.format == 'c' && args.flags << 5 != LONG_INT))
-		*str = (unsigned char)i;
-	else if (i <= 0x7FF)
-	{
-		*str++ = 0xC0 | (i >> 6 & 0x1F);
-		*str++ = 0x80 | (i & 0x3F);
-	}
-	else if (i <= 0xFFFF)
-	{
-		*str++ = 0xE0 | (i >> 12 & 0xF);
-		*str++ = 0x80 | (i >> 6 & 0x3F);
-		*str++ = 0x80 | (i & 0x3F);
-	}
-	else if (i <= 0x10FFFF)
-		ft_setwchar4(i, ret);
-	return ((char *)ret);
+	str = ft_strnew(5);
+	ft_appendwchar(va_arg(*args.args, wchar_t), str);
+	return (str);
 }
 
 char		*ft_getstr_all(t_printf_args args)

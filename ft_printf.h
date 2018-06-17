@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:35:46 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/14 16:53:51 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/16 16:54:21 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "libft/libft.h"
 # include <stdarg.h>
 
-# define MIN(X,Y) X > Y ? Y : X
-# define MAX(X,Y) X < Y ? Y : X
+# define MIN(X,Y) (X > Y ? Y : X)
+# define MAX(X,Y) (X < Y ? Y : X)
 
 typedef enum	e_types
 {

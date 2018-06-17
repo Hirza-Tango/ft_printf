@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/14 17:45:21 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/17 13:26:26 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ static int				ft_format_arg(char *format, va_list args)
 		format++;
 	if (*format == '.')
 		pf_args.precision = ft_atou_base((++(format)), 8);
+	else
+		pf_args.precision = 0;
 	while (ft_isdigit(*format))
 		format++;
 	pf_args.flags += ft_assign_length(&format) >> 5;
@@ -124,6 +126,7 @@ int						ft_printf(const char *format, ...)
 	current = (char *)format;
 	va_start(args, format);
 	while (*current)
+	{
 		if (*current == '\\')
 		{
 			if (!(esc_len = ft_put_escape(++current)))
@@ -134,9 +137,10 @@ int						ft_printf(const char *format, ...)
 			current += esc_len;
 		}
 		else if (*current == '%')
-			current += ft_format_arg(current, args) + 1;
+			current += ft_format_arg(current + 1, args) + 1;
 		else
 			ft_putchar(*current++);
+	}
 	va_end(args);
 	return (current - format);
 }
