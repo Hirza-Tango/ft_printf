@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/17 13:26:26 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/17 18:20:25 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,6 @@ static int				ft_format_arg(char *format, va_list args)
 	t_printf_args	pf_args;
 	const char		*start = format;
 
-	if (*format == '%')
-	{
-		ft_putchar('%');
-		return (1);
-	}
 	pf_args.flags = ft_assign_flags(&format);
 	pf_args.width = ft_atou_base(format, 8);
 	while (ft_isdigit(*format))
@@ -83,7 +78,7 @@ static int				ft_format_arg(char *format, va_list args)
 		pf_args.precision = 0;
 	while (ft_isdigit(*format))
 		format++;
-	pf_args.flags += ft_assign_length(&format) >> 5;
+	pf_args.flags += ft_assign_length(&format) << 5;
 	pf_args.format = *format;
 	pf_args.args = (va_list *)args;
 	ft_putarg(pf_args);

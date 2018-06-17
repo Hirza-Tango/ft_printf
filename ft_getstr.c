@@ -6,13 +6,12 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:21 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/17 17:34:04 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/17 18:21:07 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-#include <stdio.h>
 static char	*ft_getstr_str(t_printf_args args)
 {
 	char		*str;
@@ -43,7 +42,7 @@ static char	*ft_getstr_str(t_printf_args args)
 
 static char	*ft_getstr_dec(t_printf_args args)
 {
-	const unsigned char len = args.flags << 5;
+	const unsigned char len = args.flags >> 5;
 	args.flags &= ~FORCE_STYLE;
 	if (len == LONG_INT || args.format == 'D')
 		return (ft_itoa(va_arg(*args.args, long int)));
@@ -65,7 +64,7 @@ static char	*ft_getstr_dec(t_printf_args args)
 
 static char	*ft_getstr_u(t_printf_args args, char rad)
 {
-	const unsigned char len = args.flags << 5;
+	const unsigned char len = args.flags >> 5;
 
 	if (len == LONG_INT || args.format == 'O' || args.format == 'U')
 		return (ft_itoa_base(va_arg(*args.args, unsigned long int), rad));
@@ -81,8 +80,7 @@ static char	*ft_getstr_u(t_printf_args args, char rad)
 		return (ft_itoa_base(va_arg(*args.args, uintmax_t), rad));
 	if (len == SIZE_T)
 		return (ft_itoa_base(va_arg(*args.args, size_t), rad));
-	else
-		exit(1);
+	exit(1);
 }
 
 static char	*ft_getstr_char(t_printf_args args)
@@ -100,6 +98,8 @@ char		*ft_getstr_all(t_printf_args args)
 	
 	if (args.precision)
 		args.flags |= ~PAD_ZERO;
+	if (f == '%')
+		return (ft_strdup("%"));
 	if (f == 's' || f == 'S')
 		return (ft_getstr_str(args));
 	if (f == 'c' || f == 'C')

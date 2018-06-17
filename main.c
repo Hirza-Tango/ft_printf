@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/16 13:43:52 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/17 15:57:28 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/17 18:13:54 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 int		main()
 {
-	printf("%lp", 42);
+	printf("%lx", 4294967296);
 	printf("$\n");
-	ft_printf("%lp", 42);
+	ft_printf("%lx", 4294967296);
 	printf("$\n");
 	return (0);
 }

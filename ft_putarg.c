@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/17 17:34:59 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/17 18:23:36 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	ft_putarg_str(t_printf_args a, const char *str)
 {
 	const size_t	len = ft_strlen(str);
 
-	if (!a.precision || ft_tolower(a.format) == 'c')
+	if (!a.precision || ft_tolower(a.format) == 'c' || a.format == '%')
 		a.precision = len;
 	if (!(a.flags & LEFT_JUSTIFY))
 		while (a.width-- > MIN(len, a.precision))
@@ -87,7 +87,8 @@ void			ft_putarg(t_printf_args a)
 		a.flags |= FORCE_STYLE;
 	if (ft_tolower(a.format) == 'u')
 		a.flags |= ~FORCE_STYLE;
-	if (ft_tolower(a.format) == 's' || ft_tolower(a.format) == 'c')
+	if (ft_tolower(a.format) == 's' || ft_tolower(a.format) == 'c' ||
+		a.format == '%')
 		ft_putarg_str(a, str);
 	else if (ft_tolower(a.format) == 'u' || ft_tolower(a.format) == 'o' ||
 		ft_tolower(a.format) == 'x' || a.format == 'p')
