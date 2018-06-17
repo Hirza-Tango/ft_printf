@@ -6,11 +6,11 @@ CFILES=ft_getstr.c ft_helpers.c ft_printf.c ft_putarg.c
 OBJ=$(CFILES:%.c=build/%.o)
 
 $(NAME): $(OBJ) libft/libft.a
-	cp libft/libft.a $(NAME)
+	@cp libft/libft.a $(NAME)
 	@ar rcs $(NAME) $(OBJ) libft/libft.a
 
 libft/libft.a:
-	make -C libft/
+	@make -C libft/
 
 build/%.o: %.c ft_printf.h
 	@mkdir -p build
