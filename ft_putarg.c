@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/18 18:17:04 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/18 18:20:25 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static size_t	ft_putarg_str(t_printf_args a, const char *str)
 			ft_putchar(' ');
 			written++;
 		}
-	ft_putstr(str);
-	written += len;
+	write(1, str, MIN(len, a.precision));
+	written += MIN(len, a.precision);
 	if (a.flags & LEFT_JUSTIFY)
 		while (a.width-- > MIN(len, a.precision))
 		{
