@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/18 18:20:25 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/18 18:28:20 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ static size_t	ft_putarg_u(t_printf_args a, const char *str)
 		else if (a.format == 'p' || a.format == 'x')
 			ft_putchar('x');
 	}
-	while (!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
+	while ((!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
+		|| a.precision-- > len)
 	{
 		ft_putchar('0');
 		written++;
@@ -114,7 +115,8 @@ static size_t	ft_putarg_i(t_printf_args a, const char *str)
 			ft_putchar('-');
 			str++;
 		}
-	while (!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
+	while ((!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
+		|| a.precision-- > len)
 	{
 		ft_putchar('0');
 		written++;
