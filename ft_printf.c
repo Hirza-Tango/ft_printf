@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/17 18:20:25 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/18 17:56:44 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,80 +62,58 @@ static unsigned char	ft_assign_length(char **format)
 	(*format)--;
 	return (INT);
 }
-
-static int				ft_format_arg(char *format, va_list args)
+#include <stdio.h>
+static long int			ft_format_arg(char **format, va_list args)
 {
 	t_printf_args	pf_args;
-	const char		*start = format;
+	long int		result;
 
-	pf_args.flags = ft_assign_flags(&format);
-	pf_args.width = ft_atou_base(format, 8);
-	while (ft_isdigit(*format))
-		format++;
-	if (*format == '.')
-		pf_args.precision = ft_atou_base((++(format)), 8);
+	pf_args.flags = ft_assign_flags(format);
+	pf_args.width = ft_atou_base(*format, 10);
+	while (ft_isdigit(**format))
+		(*format)++;
+	if (**format == '.')
+		pf_args.precision = ft_atou_base(++(*format), 10);
 	else
-		pf_args.precision = 0;
-	while (ft_isdigit(*format))
-		format++;
-	pf_args.flags += ft_assign_length(&format) << 5;
-	pf_args.format = *format;
+		pf_args.precision = -1;
+	while (ft_isdigit(**format))
+		(*format)++;
+	pf_args.flags += ft_assign_length(format) << 5;
+	pf_args.format = **format;
+	(*format)++;
 	pf_args.args = (va_list *)args;
-	ft_putarg(pf_args);
-	return (++format - start);
-}
-
-static size_t			ft_put_escape(char *c)
-{
-	if (*c == 'a')
-		ft_putchar('\a');
-	else if (*c == 'b')
-		ft_putchar('\b');
-	else if (*c == 'c')
-		return (0);
-	else if (*c == 'f')
-		ft_putchar('\f');
-	else if (*c == 'n')
-		ft_putchar('\n');
-	else if (*c == 'r')
-		ft_putchar('\r');
-	else if (*c == 't')
-		ft_putchar('\t');
-	else if (*c == 'v')
-		ft_putchar('\v');
-	else if (*c == '\'')
-		ft_putchar('\'');
-	else if (*c == '\\')
-		ft_putchar('\\');
-	else if (ft_isdigit(*c))
-		return (ft_putlitnum(c, 8));
-	return (1);
+	//printf("len: %i, Width: %li, Precision: %li, Format: %c", pf_args.flags >> 5, pf_args.width, pf_args.precision, pf_args.format);
+	result = ft_putarg(pf_args);
+	if (result == -1)
+	{
+		(*format)--;
+		result++;
+	}
+	return (result);
 }
 
 int						ft_printf(const char *format, ...)
 {
 	va_list	args;
-	size_t	esc_len;
-	char	*current;
+	size_t	written;
+	char	**current;
 
-	current = (char *)format;
+	written = 0;
+	current = (char **)&format;
 	va_start(args, format);
-	while (*current)
+	while (**current)
 	{
-		if (*current == '\\')
+		if (**current == '%')
 		{
-			if (!(esc_len = ft_put_escape(++current)))
-			{
-				va_end(args);
-				return (current - format);
-			}
-			current += esc_len;
+			*current += 1;
+			written += ft_format_arg(current, args);
 		}
-		else if (*current == '%')
-			current += ft_format_arg(current + 1, args) + 1;
 		else
-			ft_putchar(*current++);
+		{
+			ft_putchar(*((*current)++));
+			written++;
+		}
 	}
 	va_end(args);
-	return (current - format);
+	return (written);
 }
