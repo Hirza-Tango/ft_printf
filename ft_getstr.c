@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:21 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/17 18:21:07 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/18 12:34:50 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,19 @@ static char	*ft_getstr_u(t_printf_args args, char rad)
 	const unsigned char len = args.flags >> 5;
 
 	if (len == LONG_INT || args.format == 'O' || args.format == 'U')
-		return (ft_itoa_base(va_arg(*args.args, unsigned long int), rad));
+		return (ft_utoa_base(va_arg(*args.args, unsigned long int), rad));
 	if (len == INT)
-		return (ft_itoa_base(va_arg(*args.args, unsigned int), rad));
+		return (ft_utoa_base(va_arg(*args.args, unsigned int), rad));
 	if (len == CHAR)
-		return (ft_itoa_base((unsigned char)va_arg(*args.args, int), rad));
+		return (ft_utoa_base((unsigned char)va_arg(*args.args, int), rad));
 	if (len == SHORT_INT)
-		return (ft_itoa_base((unsigned short int)va_arg(*args.args, int), rad));
+		return (ft_utoa_base((unsigned short int)va_arg(*args.args, int), rad));
 	if (len == LONG_LONG_INT)
-		return (ft_itoa_base(va_arg(*args.args, unsigned long long int), rad));
+		return (ft_utoa_base(va_arg(*args.args, unsigned long long int), rad));
 	if (len == INTMAX_T)
-		return (ft_itoa_base(va_arg(*args.args, uintmax_t), rad));
+		return (ft_utoa_base(va_arg(*args.args, uintmax_t), rad));
 	if (len == SIZE_T)
-		return (ft_itoa_base(va_arg(*args.args, size_t), rad));
+		return (ft_utoa_base(va_arg(*args.args, size_t), rad));
 	exit(1);
 }
 
