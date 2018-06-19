@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/18 17:56:44 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/19 16:10:43 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static unsigned char	ft_assign_length(char **format)
 	(*format)--;
 	return (INT);
 }
-#include <stdio.h>
+
 static long int			ft_format_arg(char **format, va_list args)
 {
 	t_printf_args	pf_args;
@@ -82,7 +82,6 @@ static long int			ft_format_arg(char **format, va_list args)
 	pf_args.format = **format;
 	(*format)++;
 	pf_args.args = (va_list *)args;
-	//printf("len: %i, Width: %li, Precision: %li, Format: %c", pf_args.flags >> 5, pf_args.width, pf_args.precision, pf_args.format);
 	result = ft_putarg(pf_args);
 	if (result == -1)
 	{

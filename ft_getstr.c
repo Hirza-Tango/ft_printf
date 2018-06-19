@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:30:21 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/19 13:57:03 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/19 16:19:44 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	*ft_getstr_str(t_printf_args args)
 	int			*arr;
 	int			*temp;
 	size_t		len;
-	
+
 	if (args.format == 's' && args.flags >> 5 != LONG_INT)
 	{
 		if (!(str = va_arg(*args.args, char *)))
@@ -69,11 +69,11 @@ static char	*ft_getstr_dec(t_printf_args args)
 	}
 	return (str);
 }
-#include <stdio.h>
+
 static char	*ft_getstr_u(t_printf_args args, char rad)
 {
-	const int len = args.flags >> 5;
-	char				*str;
+	const int	len = args.flags >> 5;
+	char		*str;
 
 	if (len == LONG_INT || args.format == 'O' || args.format == 'U')
 		str = ft_utoa_base(va_arg(*args.args, unsigned long int), rad);
@@ -91,8 +91,6 @@ static char	*ft_getstr_u(t_printf_args args, char rad)
 		str = ft_utoa_base(va_arg(*args.args, size_t), rad);
 	else
 		exit(1);
-	if (*str == '0')
-		args.flags &= ~FORCE_STYLE;//doesn't work
 	if (*str == '0' && args.precision == 0)
 	{
 		free(str);
@@ -109,8 +107,6 @@ static char	*ft_getstr_char(t_printf_args args)
 	if (args.format == 'c')
 	{
 		arg = (char)va_arg(*args.args, int);
-		if (!arg)
-			return (ft_strdup("^@"));
 		str = ft_strnew(2);
 		str[0] = arg;
 		return (str);
@@ -123,9 +119,7 @@ static char	*ft_getstr_char(t_printf_args args)
 char		*ft_getstr_all(t_printf_args args)
 {
 	const char f = args.format;
-	
-	if (args.precision > 0)
-		args.flags &= ~PAD_ZERO;//doesn't work
+
 	if (f == '%')
 		return (ft_strdup("%"));
 	if (f == 's' || f == 'S')
