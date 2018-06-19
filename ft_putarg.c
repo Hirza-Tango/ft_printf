@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/18 18:28:20 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/19 13:48:40 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,12 @@ static size_t	ft_putarg_u(t_printf_args a, const char *str)
 		else if (a.format == 'p' || a.format == 'x')
 			ft_putchar('x');
 	}
-	while ((!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
+	while ((!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width > len)
 		|| a.precision-- > len)
 	{
 		ft_putchar('0');
 		written++;
+		a.width > 0 ? a.width-- : a.width;
 	}
 	ft_putstr(str);
 	written += len;
@@ -115,11 +116,12 @@ static size_t	ft_putarg_i(t_printf_args a, const char *str)
 			ft_putchar('-');
 			str++;
 		}
-	while ((!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width-- > len)
+	while ((!(a.flags & LEFT_JUSTIFY) && a.flags & PAD_ZERO && a.width > len)
 		|| a.precision-- > len)
 	{
 		ft_putchar('0');
 		written++;
+		a.width > 0 ? a.width-- : a.width;
 	}
 	ft_putstr(str);
 	written += len;
@@ -131,22 +133,24 @@ static size_t	ft_putarg_i(t_printf_args a, const char *str)
 		}
 	return (written);
 }
-#include <stdio.h>
+
 long int		ft_putarg(t_printf_args a)
 {
 	char		*str;
+	size_t		size;
 	
 	if (!(str = ft_getstr_all(a)))
 		return (-1);
-	if (ft_tolower(a.format) == 'u' || !*str || *str == '0')
+	if (ft_tolower(a.format) == 'u')
 		a.flags &= ~FORCE_STYLE;
 	if (ft_tolower(a.format) == 's' || ft_tolower(a.format) == 'c' ||
 		a.format == '%')
-		return (ft_putarg_str(a, str));
+		size = ft_putarg_str(a, str);
 	else if (ft_tolower(a.format) == 'u' || ft_tolower(a.format) == 'o' ||
 		ft_tolower(a.format) == 'x' || a.format == 'p')
-		return (ft_putarg_u(a, str));
+		size = ft_putarg_u(a, str);
 	else
-		return (ft_putarg_i(a, str));
+		size = ft_putarg_i(a, str);
 	free(str);
+	return (size);
 }

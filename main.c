@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/16 13:43:52 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/18 17:42:39 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/06/19 13:36:54 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 int		main()
 {
-	printf("%.2x", 5427);
+	printf("%#x", 0);
 	printf("$\n");
-	ft_printf("%.2x", 5427);
+	ft_printf("%#x", 0);
 	printf("$\n");
 	return (0);
 }
