@@ -1,7 +1,7 @@
 NAME=libftprintf.a
 CC=gcc
 CFLAGS=-c -Wall -Wextra -Werror -I. -Ofast -g
-CFILES=ft_getstr.c ft_printf.c ft_putarg.c
+CFILES=ft_getstr.c ft_printf.c ft_putarg.c padding.c
 
 OBJ=$(CFILES:%.c=build/%.o)
 

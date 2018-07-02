@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/06/19 16:10:43 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/07/02 13:36:26 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static long int			ft_format_arg(char **format, va_list args)
 	pf_args.format = **format;
 	(*format)++;
 	pf_args.args = (va_list *)args;
-	result = ft_putarg(pf_args);
+	result = ft_putarg(&pf_args);
 	if (result == -1)
 	{
 		(*format)--;
