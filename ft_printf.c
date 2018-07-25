@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/07/25 14:29:56 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/07/25 15:15:06 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ static long int			ft_format_arg(char **format, va_list args)
 	pf_args.flags = ft_assign_flags(format);
 	pf_args.width = ft_assign_width(format, args);
 	if (**format == '.')
+	{
+		(*format)++;
 		pf_args.precision = ft_assign_width(format, args);
+	}
 	else
 		pf_args.precision = -1;
 	pf_args.flags += ft_assign_length(format) << 5;
