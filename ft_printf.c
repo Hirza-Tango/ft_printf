@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/07/02 13:36:26 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/07/25 14:29:56 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,35 @@ static unsigned char	ft_assign_length(char **format)
 	return (INT);
 }
 
+static long int			ft_assign_width(char **format, va_list args)
+{
+	long ret;
+
+	if (**format == '*')
+	{
+		(*format)++;
+		ret = va_arg(args, int);
+	}
+	else
+	{
+		ret = ft_atou_base(*format, 10);
+		while (ft_isdigit(**format))
+			(*format)++;
+	}
+	return (ret);
+}
+
 static long int			ft_format_arg(char **format, va_list args)
 {
 	t_printf_args	pf_args;
 	long int		result;
 
 	pf_args.flags = ft_assign_flags(format);
-	pf_args.width = ft_atou_base(*format, 10);
-	while (ft_isdigit(**format))
-		(*format)++;
+	pf_args.width = ft_assign_width(format, args);
 	if (**format == '.')
-		pf_args.precision = ft_atou_base(++(*format), 10);
+		pf_args.precision = ft_assign_width(format, args);
 	else
 		pf_args.precision = -1;
-	while (ft_isdigit(**format))
-		(*format)++;
 	pf_args.flags += ft_assign_length(format) << 5;
 	pf_args.format = **format;
 	(*format)++;
