@@ -6,14 +6,14 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:35:46 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/07/11 11:31:14 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/07/30 11:36:50 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "libft/libft.h"
+# include <libft.h>
 # include <stdarg.h>
 
 typedef enum	e_types

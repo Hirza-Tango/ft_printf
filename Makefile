@@ -1,31 +1,36 @@
 NAME=libftprintf.a
+DEPS=libft/libft.a
+LIBFT_DIR=..
+INCLUDES=$(LIBFT_DIR)/includes
+REL_DEPS=$(DEPS:%=$(LIBFT_DIR)/%)
 CC=gcc
-CFLAGS=-c -Wall -Wextra -Werror -I. -Ofast -g
+CFLAGS=-c -Wall -Wextra -Werror -I $(INCLUDES) -Ofast
 CFILES=ft_getstr.c ft_printf.c ft_putarg.c padding.c
 
 OBJ=$(CFILES:%.c=build/%.o)
 
-$(NAME): $(OBJ) libft/libft.a
-	@cp libft/libft.a $(NAME)
-	@ar rcs $(NAME) $(OBJ) libft/libft.a
+$(NAME): $(OBJ) $(REL_DEPS)
+	@ar rcs $(NAME) $(OBJ) $(REL_DEPS)
 
-libft/libft.a:
-	@make -C libft/
+$(REL_DEPS):
+	@make -C $(dir $@)
 
-build/%.o: %.c ft_printf.h
+build/%.o: %.c
+	echo $(INCLUDES)
 	@mkdir -p build
 	@$(CC) $(CFLAGS) $< -o $@
 
 all: $(NAME);
 
-clean:
-	@rm -rf build/
-	@make -C libft clean
- 
-fclean: clean
-	@rm -rf $(NAME)
-	@make -C libft fclean
+clean fclean re::
+	@for file in $(dir $(REL_DEPS)) ; do $(MAKE) -C $$file $@ ; done
 
-re: fclean all
+clean::
+	@rm -rf build/
+
+fclean::
+	@rm -rf $(NAME)
+
+re:: fclean all
 
 .PHONY: clean fclean re all
