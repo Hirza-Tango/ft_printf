@@ -16,7 +16,6 @@ $(REL_DEPS):
 	@make -C $(dir $@)
 
 build/%.o: %.c
-	echo $(INCLUDES)
 	@mkdir -p build
 	@$(CC) $(CFLAGS) $< -o $@
 
