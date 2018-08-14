@@ -6,11 +6,11 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/14 16:31:04 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/08/14 16:34:58 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/08/14 16:41:53 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <printf.h>
+#include <ft_printf.h>
 
 int		ft_printf(const char *format, ...)
 {
