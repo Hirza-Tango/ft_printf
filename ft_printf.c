@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 14:20:14 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/07/25 15:15:06 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/08/14 16:33:38 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static long int			ft_assign_width(char **format, va_list args)
 	return (ret);
 }
 
-static long int			ft_format_arg(char **format, va_list args)
+static long int			ft_format_arg(char **format, va_list args, int fd)
 {
 	t_printf_args	pf_args;
 	long int		result;
@@ -99,7 +99,7 @@ static long int			ft_format_arg(char **format, va_list args)
 	pf_args.format = **format;
 	(*format)++;
 	pf_args.args = (va_list *)args;
-	result = ft_putarg(&pf_args);
+	result = ft_putarg(&pf_args, fd);
 	if (result == -1)
 	{
 		(*format)--;
@@ -108,25 +108,25 @@ static long int			ft_format_arg(char **format, va_list args)
 	return (result);
 }
 
-int						ft_printf(const char *format, ...)
+int						ft_vprintf_fd(int fd, const char *format, va_list args)
 {
-	va_list	args;
 	size_t	written;
 	char	**current;
 
+	if (fd < 0)
+		return (-1);
 	written = 0;
 	current = (char **)&format;
-	va_start(args, format);
 	while (**current)
 	{
 		if (**current == '%')
 		{
 			*current += 1;
-			written += ft_format_arg(current, args);
+			written += ft_format_arg(current, args, fd);
 		}
 		else
 		{
-			ft_putchar(*((*current)++));
+			ft_putchar_fd(*((*current)++), fd);
 			written++;
 		}
 	}

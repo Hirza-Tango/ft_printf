@@ -6,13 +6,13 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/10 15:41:37 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/07/02 16:06:11 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/08/14 16:29:38 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static size_t	ft_putarg_str(t_printf_args *a, const char *str)
+static size_t	ft_putarg_str(t_printf_args *a, const char *str, int fd)
 {
 	int			len;
 	size_t		written;
@@ -24,21 +24,21 @@ static size_t	ft_putarg_str(t_printf_args *a, const char *str)
 	if (!(a->flags & LEFT_JUSTIFY))
 		while (a->width-- > MIN(len, a->precision))
 		{
-			ft_putchar(' ');
+			ft_putchar_fd(' ', fd);
 			written++;
 		}
-	write(1, str, MIN(len, a->precision));
+	write(fd, str, MIN(len, a->precision));
 	written += MIN(len, a->precision);
 	if (a->flags & LEFT_JUSTIFY)
 		while (a->width-- > MIN(len, a->precision))
 		{
-			ft_putchar(' ');
+			ft_putchar_fd(' ', fd);
 			written++;
 		}
 	return (written);
 }
 
-static size_t	ft_putarg_u(t_printf_args *a, const char *str)
+static size_t	ft_putarg_u(t_printf_args *a, const char *str, int fd)
 {
 	const long int	len = ft_strlen(str);
 	size_t			written;
@@ -52,20 +52,20 @@ static size_t	ft_putarg_u(t_printf_args *a, const char *str)
 			a->width > 0 ? a->width-- && written++ : written++;
 		a->width > 0 ? a->width-- && written++ : written++;
 	}
-	written += pad_start(a, len);
+	written += pad_start(a, len, fd);
 	if (a->flags & FORCE_STYLE && (*str || ft_tolower(a->format) == 'o') &&
 		(*str != '0' || a->format == 'p'))
 	{
-		ft_putchar('0');
+		ft_putchar_fd('0', fd);
 		if (a->format == 'X' && *str && *str != '0')
-			ft_putchar('X');
+			ft_putchar_fd('X', fd);
 		else if (a->format == 'p' || (a->format == 'x' && *str && *str != '0'))
-			ft_putchar('x');
+			ft_putchar_fd('x', fd);
 	}
-	return (written + pad_end(a, len, str));
+	return (written + pad_end(a, len, str, fd));
 }
 
-static size_t	ft_putarg_i(t_printf_args *a, const char *str)
+static size_t	ft_putarg_i(t_printf_args *a, const char *str, int fd)
 {
 	const long int	len = ft_strlen(str);
 	size_t			written;
@@ -79,22 +79,22 @@ static size_t	ft_putarg_i(t_printf_args *a, const char *str)
 	if (!(a->flags & LEFT_JUSTIFY) & !(a->flags & PAD_ZERO))
 		while (a->width-- > MAX(len, a->precision))
 		{
-			ft_putchar(' ');
+			ft_putchar_fd(' ', fd);
 			written++;
 		}
 	if (*str != '-' && (a->flags & SIGN_PLUS))
-		ft_putchar('+');
+		ft_putchar_fd('+', fd);
 	else if (*str != '-' && (a->flags & SIGN_SPACE))
-		ft_putchar(' ');
+		ft_putchar_fd(' ', fd);
 	else if (*str == '-')
 	{
-		ft_putchar('-');
+		ft_putchar_fd('-', fd);
 		str++;
 	}
-	return (written + pad_end(a, len, str));
+	return (written + pad_end(a, len, str, fd));
 }
 
-long int		ft_putarg(t_printf_args *a)
+long int		ft_putarg(t_printf_args *a, int fd)
 {
 	char		*str;
 	size_t		size;
@@ -107,12 +107,12 @@ long int		ft_putarg(t_printf_args *a)
 		a->flags &= ~PAD_ZERO;
 	if (ft_tolower(a->format) == 's' || ft_tolower(a->format) == 'c' ||
 		a->format == '%')
-		size = ft_putarg_str(a, str);
+		size = ft_putarg_str(a, str, fd);
 	else if (ft_tolower(a->format) == 'u' || ft_tolower(a->format) == 'o' ||
 		ft_tolower(a->format) == 'x' || a->format == 'p')
-		size = ft_putarg_u(a, str);
+		size = ft_putarg_u(a, str, fd);
 	else
-		size = ft_putarg_i(a, str);
+		size = ft_putarg_i(a, str, fd);
 	free(str);
 	return (size);
 }

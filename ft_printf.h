@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:35:46 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/07/30 11:36:50 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/08/14 16:36:20 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,14 @@ typedef struct	s_printf_args
 	long int		precision;
 }				t_printf_args;
 
+int				ft_vprintf_fd(int fd, const char *format, va_list args);
 int				ft_printf(const char *format, ...);
+int				ft_printf_fd(int fd, const char *format, ...);
+
 char			*ft_getstr_all(t_printf_args *args);
-long int		ft_putarg(t_printf_args *a);
-size_t			pad_start(t_printf_args *a, const long int len);
-size_t			pad_end(t_printf_args *a, const long int len, const char *str);
+long int		ft_putarg(t_printf_args *a, int fd);
+size_t			pad_start(t_printf_args *a, const long int len, int fd);
+size_t			pad_end(t_printf_args *a, const long int len, const char *str,
+	int fd);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/02 15:00:55 by dslogrov          #+#    #+#             */
-/*   Updated: 2018/07/02 15:12:11 by dslogrov         ###   ########.fr       */
+/*   Updated: 2018/08/14 16:27:00 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
 
-size_t	pad_start(t_printf_args *a, const long int len)
+size_t	pad_start(t_printf_args *a, const long int len, int fd)
 {
 	size_t	written;
 
@@ -21,28 +21,28 @@ size_t	pad_start(t_printf_args *a, const long int len)
 		while (a->width-- > MAX(len, a->precision))
 		{
 			written++;
-			ft_putchar(' ');
+			ft_putchar_fd(' ', fd);
 		}
 	return (written);
 }
 
-size_t	pad_end(t_printf_args *a, const long int len, const char *str)
+size_t	pad_end(t_printf_args *a, const long int len, const char *str, int fd)
 {
 	size_t	written;
 
 	written = 0;
 	while ((a->flags & PAD_ZERO && a->width > len) || a->precision-- > len)
 	{
-		ft_putchar('0');
+		ft_putchar_fd('0', fd);
 		written++;
 		a->width > 0 ? a->width-- : a->width;
 	}
-	ft_putstr(str);
+	ft_putstr_fd(str, fd);
 	written += len;
 	if (a->flags & LEFT_JUSTIFY)
 		while (a->width-- > MAX(len, a->precision))
 		{
-			ft_putchar(' ');
+			ft_putchar_fd(' ', fd);
 			written++;
 		}
 	return (written);
