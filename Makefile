@@ -5,7 +5,8 @@ INCLUDES=$(LIBFT_DIR)/includes
 REL_DEPS=$(DEPS:%=$(LIBFT_DIR)/%)
 CC=gcc
 CFLAGS=-c -Wall -Wextra -Werror -I $(INCLUDES) -Ofast
-CFILES=ft_getstr.c ft_printf.c ft_putarg.c padding.c implementations.c
+CFILES=	ft_getstr.c	ft_printf.c	ft_putarg.c	padding.c	implementations.c \
+	ft_hexdump.c
 
 OBJ=$(CFILES:%.c=build/%.o)
 
