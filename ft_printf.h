@@ -6,7 +6,7 @@
 /*   By: dslogrov <dslogrove@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/05 16:35:46 by dslogrov          #+#    #+#             */
-/*   Updated: 2019/07/17 14:15:38 by dslogrov         ###   ########.fr       */
+/*   Updated: 2019/08/07 15:04:05 by dslogrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,5 @@ long int		ft_putarg(t_printf_args *a, int fd);
 size_t			pad_start(t_printf_args *a, const long int len, int fd);
 size_t			pad_end(t_printf_args *a, const long int len, const char *str,
 	int fd);
-
-void			ft_hexdump(void *region, size_t size, off_t offset, int fd);
 
 #endif
